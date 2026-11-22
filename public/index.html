@@ -6,168 +6,154 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>ADI'S SCRIPT VAULT</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Inter:wght@400;500;600;700&display=swap');
-:root{--bg:#08060f;--panel:#120d20;--purple:#a855f7;--pink:#d946ef;--text:#f5edff;--muted:#a99bbd}
+:root{--purple:#a855f7;--pink:#d946ef;--text:#f5edff;--muted:#a99bbd}
 *{box-sizing:border-box}
-body{margin:0;background:radial-gradient(ellipse at 50% -20%,#39145d 0%,#10091c 45%,#08060f 80%);color:var(--text);font-family:Inter,sans-serif;min-height:100vh}
-header{padding:25px 6%;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #ffffff12;position:sticky;top:0;background:#0b0715eF;backdrop-filter:blur(15px);z-index:5}
-.logo{font:900 19px Orbitron;color:#d8a5ff;letter-spacing:1px;text-shadow:0 0 18px #a855f7}
-button{cursor:pointer;border:0;border-radius:10px;padding:11px 17px;font-weight:700;color:white;background:linear-gradient(110deg,#7c3aed,#c026d3);transition:.2s}
+body{margin:0;background:radial-gradient(ellipse at 50% -20%,#39145d,#10091c 45%,#08060f 80%);color:var(--text);font-family:Inter,sans-serif;min-height:100vh}
+header{padding:22px 6%;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #ffffff12;position:sticky;top:0;background:#0b0715ed;backdrop-filter:blur(15px);z-index:5}
+.logo{font:900 18px Orbitron;color:#d8a5ff;text-shadow:0 0 18px var(--purple)}
+button{cursor:pointer;border:0;border-radius:10px;padding:11px 16px;font-weight:700;color:white;background:linear-gradient(110deg,#7c3aed,#c026d3);transition:.2s}
 button:hover{transform:translateY(-2px);filter:brightness(1.2);box-shadow:0 0 20px #a855f766}
 .secondary{background:#ffffff12;border:1px solid #ffffff20}
 .danger{background:#9f1239}
-.hero{text-align:center;padding:85px 20px 55px;animation:fade .8s ease}
+.hero{text-align:center;padding:80px 20px 50px;animation:fade .8s ease}
 .hero h1{font:900 clamp(30px,7vw,65px) Orbitron;margin:0 0 15px;background:linear-gradient(90deg,#fff,#c084fc,#e879f9);color:transparent;background-clip:text}
-.hero p{color:var(--muted);font-size:15px}
-.glow{color:#d8a5ff;text-shadow:0 0 15px #a855f7}
+.hero p{color:var(--muted);font-size:14px}
+.glow{color:#d8a5ff!important;text-shadow:0 0 15px var(--purple)}
 .wrap{max-width:1100px;margin:auto;padding:0 20px 70px}
 .toolbar{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:25px}
-input,textarea{width:100%;padding:13px 14px;background:#0c0915;border:1px solid #ffffff20;border-radius:10px;color:white;font:inherit;outline:none}
-input:focus,textarea:focus{border-color:var(--purple);box-shadow:0 0 12px #a855f733}
+input,textarea{width:100%;padding:13px;background:#0c0915;border:1px solid #ffffff20;border-radius:10px;color:white;font:inherit;outline:none}
+input:focus,textarea:focus{border-color:var(--purple)}
 #search{flex:1;min-width:190px}
 #cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:17px}
-.card{background:linear-gradient(145deg,#191027,#100b19);border:1px solid #ffffff16;border-radius:17px;padding:20px;animation:fade .45s ease;transition:.25s;min-width:0}
+.card{background:linear-gradient(145deg,#191027,#100b19);border:1px solid #ffffff16;border-radius:17px;padding:20px;animation:fade .45s ease;transition:.25s}
 .card:hover{transform:translateY(-5px);border-color:#a855f788;box-shadow:0 10px 35px #7c3aed20}
-.card h3{margin:0 0 8px;font-size:19px}
+.card h3{margin:0 0 8px}
 .tag{display:inline-block;color:#d8a5ff;background:#a855f722;border:1px solid #a855f744;padding:5px 9px;border-radius:20px;font-size:11px;margin-bottom:12px}
-.desc{color:var(--muted);font-size:13px;line-height:1.6;min-height:38px}
+.desc{color:var(--muted);font-size:13px;line-height:1.6}
 pre{background:#08060f;padding:14px;border-radius:10px;white-space:pre-wrap;overflow-wrap:anywhere;max-height:180px;overflow:auto;color:#d8b4fe;font-size:12px;border:1px solid #ffffff12}
 .actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
 .actions button{font-size:12px;padding:9px 12px}
-#adminPanel{display:none;background:#171023;border:1px solid #a855f766;border-radius:16px;padding:20px;margin-bottom:25px}
+#adminPanel,#loginPanel{display:none;background:#171023;border:1px solid #a855f766;border-radius:16px;padding:20px;margin-bottom:25px}
 #adminPanel h2{font:700 17px Orbitron;color:#d8a5ff}
-.fields{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.fields textarea{grid-column:1/-1;min-height:120px}
-#loginPanel{display:none;background:#171023;border:1px solid #a855f766;border-radius:16px;padding:20px;margin-bottom:25px;max-width:430px}
+#loginPanel{max-width:430px}
 #loginPanel input{margin:7px 0}
+.fields{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.fields textarea{grid-column:1/-1;min-height:100px}
 .empty{text-align:center;color:var(--muted);padding:50px 10px;grid-column:1/-1}
-footer{text-align:center;padding:30px;color:#796b8b;border-top:1px solid #ffffff12;font-size:12px}
 .small{font-size:12px;color:var(--muted)}
+footer{text-align:center;padding:30px;color:#796b8b;border-top:1px solid #ffffff12;font-size:12px}
 @keyframes fade{from{opacity:0;transform:translateY(15px)}to{opacity:1;transform:translateY(0)}}
-@media(max-width:550px){header{padding:18px 15px}.logo{font-size:14px}.hero{padding-top:65px}.fields{grid-template-columns:1fr}.fields textarea{grid-column:auto}}
+@media(max-width:550px){header{padding:18px 15px}.logo{font-size:13px}.hero{padding-top:60px}.fields{grid-template-columns:1fr}.fields textarea{grid-column:auto}}
 </style>
 </head>
 <body>
 <header>
-  <div class="logo">ADI'S SCRIPT VAULT</div>
-  <button class="secondary" id="loginBtn">ADMIN LOGIN</button>
+<div class="logo">ADI'S SCRIPT VAULT</div>
+<button class="secondary" id="loginBtn">ADMIN LOGIN</button>
 </header>
 
 <section class="hero">
-  <h1> SCRIPT VAULT </h1>
-  <p>YOUR COLLECTION. YOUR LIBRARY. YOUR VAULT.</p>
-  <p class="glow">✦ ROBLOX LUAU SCRIPT LIBRARY ✦</p>
+<h1>SCRIPT VAULT</h1>
+<p>YOUR COLLECTION. YOUR LIBRARY. YOUR VAULT.</p>
+<p class="glow">✦ ROBLOX LUAU SCRIPT LIBRARY ✦</p>
 </section>
 
 <main class="wrap">
-  <div id="loginPanel">
-    <h3>Admin Login</h3>
-    <input id="email" type="email" placeholder="Admin email">
-    <input id="password" type="password" placeholder="Password">
-    <div class="actions">
-      <button id="signIn">LOGIN</button>
-      <button class="secondary" id="closeLogin">CLOSE</button>
-    </div>
-    <p class="small">Only the authorized vault owner can log in.</p>
-    <p id="loginMsg" class="small"></p>
-  </div>
+<div id="loginPanel">
+<h3>Admin Login</h3>
+<input id="email" type="email" placeholder="Admin email">
+<input id="password" type="password" placeholder="Password">
+<div class="actions">
+<button id="signIn">LOGIN</button>
+<button class="secondary" id="closeLogin">CLOSE</button>
+</div>
+<p id="loginMsg" class="small"></p>
+</div>
 
-  <section id="adminPanel">
-    <h2>✦ VAULT CONTROL</h2>
-    <p class="small">Admin mode — add or edit your library entries.</p>
-    <div class="fields">
-      <input id="title" placeholder="Script title">
-      <input id="game" placeholder="Game / Category">
-      <textarea id="description" placeholder="Description"></textarea>
-      <textarea id="code" placeholder="Paste legitimate Luau code here"></textarea>
-    </div>
-    <div class="actions">
-      <button id="saveBtn">SAVE SCRIPT</button>
-      <button class="secondary" id="cancelEdit">CANCEL EDIT</button>
-      <button class="danger" id="logoutBtn">LOG OUT</button>
-    </div>
-    <p id="adminMsg" class="small"></p>
-  </section>
+<section id="adminPanel">
+<h2>✦ VAULT CONTROL</h2>
+<p class="small">Admin mode — manage your library.</p>
+<div class="fields">
+<input id="title" placeholder="Script title">
+<input id="game" placeholder="Game / Category">
+<textarea id="description" placeholder="Description"></textarea>
+<textarea id="code" placeholder="Paste legitimate Luau code here"></textarea>
+</div>
+<div class="actions">
+<button id="saveBtn">SAVE SCRIPT</button>
+<button class="secondary" id="cancelEdit">CANCEL EDIT</button>
+<button class="danger" id="logoutBtn">LOG OUT</button>
+</div>
+<p id="adminMsg" class="small"></p>
+</section>
 
-  <div class="toolbar">
-    <input id="search" placeholder="⌕ Search scripts or games...">
-    <button class="secondary" id="refreshBtn">↻ REFRESH</button>
-  </div>
-  <div id="cards"><div class="empty">Loading your vault...</div></div>
+<div class="toolbar">
+<input id="search" placeholder="⌕ Search scripts or games...">
+<button class="secondary" id="refreshBtn">↻ REFRESH</button>
+</div>
+<div id="cards"><div class="empty">Loading your vault...</div></div>
 </main>
 
 <footer>ADI'S SCRIPT VAULT · BUILT FOR THE COMMUNITY</footer>
 
 <script>
-/* ADD YOUR SUPABASE DETAILS HERE */
-const SUPABASE_URL = "YOUR_SUPABASE_PROJECT_URL";
-const SUPABASE_KEY = "YOUR_SUPABASE_ANON_KEY";
+const SUPABASE_URL = "https://lvcohnoioiclmnufgcfq.supabase.co";
+const SUPABASE_KEY = "sb_publishable_ZH0A8mrFxM_WkgjsdAhxpg_CxJjDNho";
 
-const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-let isAdmin = false;
-let editingId = null;
-let allScripts = [];
+const db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+let isAdmin=false,editingId=null,allScripts=[];
+const $=id=>document.getElementById(id);
+const msg=(id,t)=>$(id).textContent=t;
 
-const $ = id => document.getElementById(id);
-const msg = (id, text) => $(id).textContent = text;
-
-function escapeHTML(value=""){
-  return String(value).replace(/[&<>"']/g, c => ({
-    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
-  }[c]));
+function escapeHTML(v=""){
+return String(v).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 }
 
 async function loadScripts(){
-  $("cards").innerHTML='<div class="empty">Loading...</div>';
-  const {data,error}=await db.from("scripts").select("*").order("created_at",{ascending:false});
-  if(error){$("cards").innerHTML='<div class="empty">Could not load scripts. Check database setup.</div>';return;}
-  allScripts=data||[];
-  renderScripts();
+$("cards").innerHTML='<div class="empty">Loading...</div>';
+const {data,error}=await db.from("scripts").select("*").order("created_at",{ascending:false});
+if(error){$("cards").innerHTML='<div class="empty">Database error: '+escapeHTML(error.message)+'</div>';return;}
+allScripts=data||[];
+renderScripts();
 }
 
 function renderScripts(){
-  const q=$("search").value.toLowerCase();
-  const list=allScripts.filter(s=>
-    (s.title+" "+s.game+" "+s.description).toLowerCase().includes(q)
-  );
-  if(!list.length){$("cards").innerHTML='<div class="empty">No scripts found ✦</div>';return;}
-  $("cards").innerHTML=list.map(s=>`
-    <article class="card">
-      <span class="tag">${escapeHTML(s.game)}</span>
-      <h3>${escapeHTML(s.title)}</h3>
-      <p class="desc">${escapeHTML(s.description)}</p>
-      <pre>${escapeHTML(s.code)}</pre>
-      <div class="actions">
-        <button data-copy="${s.id}">COPY CODE</button>
-        ${isAdmin?`<button class="secondary" data-edit="${s.id}">EDIT</button><button class="danger" data-delete="${s.id}">DELETE</button>`:""}
-      </div>
-    </article>`).join("");
+const q=$("search").value.toLowerCase();
+const list=allScripts.filter(s=>(s.title+" "+s.game+" "+s.description).toLowerCase().includes(q));
+if(!list.length){$("cards").innerHTML='<div class="empty">No scripts found ✦</div>';return;}
+$("cards").innerHTML=list.map(s=>`
+<article class="card">
+<span class="tag">${escapeHTML(s.game)}</span>
+<h3>${escapeHTML(s.title)}</h3>
+<p class="desc">${escapeHTML(s.description||"")}</p>
+<pre>${escapeHTML(s.code)}</pre>
+<div class="actions">
+<button data-copy="${s.id}">COPY CODE</button>
+${isAdmin?`<button class="secondary" data-edit="${s.id}">EDIT</button><button class="danger" data-delete="${s.id}">DELETE</button>`:""}
+</div></article>`).join("");
 }
 
 $("cards").addEventListener("click",async e=>{
-  const copy=e.target.dataset.copy;
-  const edit=e.target.dataset.edit;
-  const del=e.target.dataset.delete;
-  if(copy){
-    const item=allScripts.find(s=>String(s.id)===copy);
-    try{await navigator.clipboard.writeText(item.code);e.target.textContent="COPIED ✓";}
-    catch{alert("Copy not available. Select the code and copy it manually.");}
-  }
-  if(edit){
-    const s=allScripts.find(x=>String(x.id)===edit);
-    editingId=s.id;
-    $("title").value=s.title;
-    $("game").value=s.game;
-    $("description").value=s.description;
-    $("code").value=s.code;
-    $("saveBtn").textContent="UPDATE SCRIPT";
-    window.scrollTo({top:0,behavior:"smooth"});
-  }
-  if(del && confirm("Delete this script?")){
-    const {error}=await db.from("scripts").delete().eq("id",del);
-    if(error)alert(error.message);else loadScripts();
-  }
+const copy=e.target.dataset.copy,edit=e.target.dataset.edit,del=e.target.dataset.delete;
+if(copy){
+const item=allScripts.find(s=>String(s.id)===copy);
+try{await navigator.clipboard.writeText(item.code);e.target.textContent="COPIED ✓";}
+catch{alert("Copy unavailable. Please select and copy the code manually.");}
+}
+if(edit){
+const s=allScripts.find(x=>String(x.id)===edit);
+editingId=s.id;
+$("title").value=s.title;$("game").value=s.game;
+$("description").value=s.description||"";$("code").value=s.code;
+$("saveBtn").textContent="UPDATE SCRIPT";
+window.scrollTo({top:0,behavior:"smooth"});
+}
+if(del&&confirm("Delete this script?")){
+const {error}=await db.from("scripts").delete().eq("id",del);
+if(error)alert(error.message);else loadScripts();
+}
 });
 
 $("search").addEventListener("input",renderScripts);
@@ -176,76 +162,60 @@ $("loginBtn").onclick=()=>{$("loginPanel").style.display="block";};
 $("closeLogin").onclick=()=>{$("loginPanel").style.display="none";};
 
 async function checkAdmin(){
-  const {data:{session}}=await db.auth.getSession();
-  if(!session){setAdmin(false);return;}
-  const {data,error}=await db.from("admins").select("id").eq("id",session.user.id).maybeSingle();
-  if(error||!data){setAdmin(false);return;}
-  setAdmin(true);
+const {data:{session}}=await db.auth.getSession();
+if(!session){setAdmin(false);return;}
+const {data,error}=await db.from("admins").select("id").eq("id",session.user.id).maybeSingle();
+if(error||!data){setAdmin(false);return;}
+setAdmin(true);
 }
 
-function setAdmin(value){
-  isAdmin=value;
-  $("adminPanel").style.display=value?"block":"none";
-  $("loginBtn").style.display=value?"none":"block";
-  renderScripts();
+function setAdmin(v){
+isAdmin=v;
+$("adminPanel").style.display=v?"block":"none";
+$("loginBtn").style.display=v?"none":"block";
+renderScripts();
 }
 
 $("signIn").onclick=async()=>{
-  msg("loginMsg","Checking login...");
-  const {error}=await db.auth.signInWithPassword({
-    email:$("email").value,password:$("password").value
-  });
-  if(error){msg("loginMsg",error.message);return;}
-  await checkAdmin();
-  if(!isAdmin){msg("loginMsg","This account is not an authorized admin.");await db.auth.signOut();return;}
-  $("loginPanel").style.display="none";
+msg("loginMsg","Checking login...");
+const {error}=await db.auth.signInWithPassword({email:$("email").value,password:$("password").value});
+if(error){msg("loginMsg",error.message);return;}
+await checkAdmin();
+if(!isAdmin){msg("loginMsg","This account is not an authorized admin.");await db.auth.signOut();return;}
+$("loginPanel").style.display="none";
 };
 
 $("saveBtn").onclick=async()=>{
-  if(!isAdmin)return;
-  const item={
-    title:$("title").value.trim(),
-    game:$("game").value.trim(),
-    description:$("description").value.trim(),
-    code:$("code").value
-  };
-  if(!item.title||!item.game||!item.code){msg("adminMsg","Fill title, game and code.");return;}
-  msg("adminMsg","Saving...");
-  const result=editingId
-    ?await db.from("scripts").update(item).eq("id",editingId)
-    :await db.from("scripts").insert(item);
-  if(result.error){msg("adminMsg",result.error.message);return;}
-  editingId=null;
-  ["title","game","description","code"].forEach(id=>$(id).value="");
-  $("saveBtn").textContent="SAVE SCRIPT";
-  msg("adminMsg","Saved successfully!");
-  loadScripts();
+if(!isAdmin)return;
+const item={title:$("title").value.trim(),game:$("game").value.trim(),description:$("description").value.trim(),code:$("code").value};
+if(!item.title||!item.game||!item.code){msg("adminMsg","Fill title, game and code.");return;}
+msg("adminMsg","Saving...");
+const result=editingId?await db.from("scripts").update(item).eq("id",editingId):await db.from("scripts").insert(item);
+if(result.error){msg("adminMsg",result.error.message);return;}
+editingId=null;
+["title","game","description","code"].forEach(id=>$(id).value="");
+$("saveBtn").textContent="SAVE SCRIPT";
+msg("adminMsg","Saved successfully!");
+loadScripts();
 };
 
 $("cancelEdit").onclick=()=>{
-  editingId=null;
-  ["title","game","description","code"].forEach(id=>$(id).value="");
-  $("saveBtn").textContent="SAVE SCRIPT";
-  msg("adminMsg","Edit cancelled.");
+editingId=null;
+["title","game","description","code"].forEach(id=>$(id).value="");
+$("saveBtn").textContent="SAVE SCRIPT";
+msg("adminMsg","Edit cancelled.");
 };
 
 $("logoutBtn").onclick=async()=>{
-  await db.auth.signOut();
-  setAdmin(false);
-  loadScripts();
+await db.auth.signOut();setAdmin(false);loadScripts();
 };
 
 db.auth.onAuthStateChange(()=>setTimeout(checkAdmin,0));
 
 (async()=>{
-  if(SUPABASE_URL.startsWith("https://") && SUPABASE_KEY!=="YOUR_SUPABASE_ANON_KEY"){
-    await checkAdmin();
-    await loadScripts();
-  }else{
-    $("cards").innerHTML='<div class="empty">Connect your Supabase database to activate the vault.</div>';
-  }
+await checkAdmin();
+await loadScripts();
 })();
 </script>
 </body>
 </html>
-
