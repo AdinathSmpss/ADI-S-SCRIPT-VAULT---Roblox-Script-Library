@@ -161,7 +161,34 @@ select{
   color:#d8a5ff;font-size:10px;margin-bottom:11px;
 }
 .card h3{margin:0 0 8px;font-size:17px}
-.desc{font-size:12px;color:var(--muted);line-height:1.6;min-height:35px}
+.desc{
+  font-size:12px;
+  color:var(--muted);
+  line-height:1.6;
+  min-height:35px;
+}
+.desc.collapsed{
+  display:-webkit-box;
+  -webkit-line-clamp:3;
+  -webkit-box-orient:vertical;
+  overflow:hidden;
+}
+.read-more{
+  display:inline-block;
+  background:transparent;
+  border:0;
+  color:#d8a5ff;
+  padding:5px 0;
+  margin-top:5px;
+  font-size:10px;
+  font-weight:800;
+  cursor:pointer;
+  transform:none !important;
+}
+.read-more:hover{
+  color:white;
+  filter:none;
+}
 .codebox{
   display:none;margin-top:12px;
   background:#08060f;border:1px solid var(--line);
@@ -410,6 +437,9 @@ function renderScripts(){
 
   $("cards").innerHTML = list.map(s=>{
     const id = escapeHTML(s.id);
+    const description = s.description || "No description added.";
+    const longDescription = description.length > 120;
+
     const image = s.image_url
       ? '<img class="thumb" src="'+escapeHTML(s.image_url)+'" alt="Game screenshot" loading="lazy" onerror="this.style.display=\'none\'">'
       : '<div class="noimage">✦ NO SCREENSHOT ✦</div>';
@@ -420,7 +450,14 @@ function renderScripts(){
         <div class="cardbody">
           <span class="tag">${escapeHTML(s.game || "Uncategorized")}</span>
           <h3>${escapeHTML(s.title)}</h3>
-          <p class="desc">${escapeHTML(s.description || "No description added.")}</p>
+
+          <p class="desc ${longDescription ? 'collapsed' : ''}">${escapeHTML(description)}</p>
+
+          ${longDescription ? `
+            <button class="read-more" type="button" data-readmore="${id}">
+              READ MORE ↓
+            </button>
+          ` : ""}
 
           <div class="codebox" id="code-${id}">
             <pre>${escapeHTML(s.code || "")}</pre>
@@ -447,6 +484,16 @@ function renderScripts(){
 $("cards").addEventListener("click",async e=>{
   const button = e.target.closest("button");
   if(!button) return;
+
+  // READ MORE / READ LESS
+  if(button.dataset.readmore){
+    const description = button.previousElementSibling;
+    const expanded = !description.classList.contains("collapsed");
+
+    description.classList.toggle("collapsed");
+    button.textContent = expanded ? "READ MORE ↓" : "READ LESS ↑";
+    return;
+  }
 
   const id = button.dataset.view || button.dataset.copy ||
     button.dataset.fav || button.dataset.edit || button.dataset.delete;
